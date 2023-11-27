@@ -23,13 +23,13 @@ handler = WebhookHandler('9cf048df757b3f7caabf30a89c853c9a')
 def callback():
   line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='你可以開始了'))
   try:
-    u = urlparse("https://server-slr7.onrender.com/callbcak?1")
-    if u.query == '1':
+    msg = request.args.get('msg')
+    if msg == '1':
       line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='早安 吃藥時間到囉! ฅ●ω●ฅ'))
-    elif u.query == '2':
+    elif msg == '2':
       # 如果 msg 等於 2，發送午安
       line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='午安 吃藥時間到囉!(๑´ㅂ`๑) '))
-    elif u.query == '3':
+    elif msg == '3':
       # 如果 msg 等於 3，發送晚安
       line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='早安 吃藥時間到囉! ٩(｡・ω・｡)و'))
     else:
