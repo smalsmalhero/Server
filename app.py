@@ -22,7 +22,22 @@ line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(t
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['GET','POST'])
 def callback():
-    return 'OK'
+  try:
+    msg = request.args.get('msg')
+    if msg == '1':
+      # 如果 msg 等於 1，發送早安
+      line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='早安 吃藥時間到囉! ฅ●ω●ฅ'))
+    elif msg == '2':
+      # 如果 msg 等於 2，發送午安
+      line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='午安 吃藥時間到囉!(๑´ㅂ`๑) '))
+    elif msg == '3':
+      # 如果 msg 等於 3，發送晚安
+      line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='早安 吃藥時間到囉! ٩(｡・ω・｡)و'))
+    else:
+      msg = 'ok'   # 如果沒有 msg 或 msg 不是 1～4，將 msg 設定為 ok
+    return msg
+  except:
+    print('error')
 
  
 #訊息傳遞區塊
