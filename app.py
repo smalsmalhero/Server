@@ -9,6 +9,7 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 
+
 app = Flask(__name__)
 
 # 必須放上自己的Channel Access Token
