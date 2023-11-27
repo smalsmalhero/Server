@@ -21,7 +21,6 @@ handler = WebhookHandler('9cf048df757b3f7caabf30a89c853c9a')
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['GET','POST'])
 def callback():
-  line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='你可以開始了'))
   try:
     msg = request.args.get('msg')
     if msg == '1':
@@ -31,7 +30,7 @@ def callback():
       line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='午安 吃藥時間到囉!(๑´ㅂ`๑) '))
     elif msg == '3':
       # 如果 msg 等於 3，發送晚安
-      line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='早安 吃藥時間到囉! ٩(｡・ω・｡)و'))
+      line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='晚安 吃藥時間到囉! ٩(｡・ω・｡)و'))
     else:
       msg = 'ok'   # 如果沒有 msg 或 msg 不是 1～4，將 msg 設定為 ok
     return msg
