@@ -22,6 +22,7 @@ line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(t
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['GET','POST'])
 def callback():
+  line_bot_api = LineBotApi('AU/QDri2KE1NXmPy3qxcO7hY9+GmviLxov3guTlLUT5XfpsrRlXA7we4I32aRebmsHxr/MMl6ywNJLHSD/qmBRvYmFt0esCWnAFiGkYaijl9D05w1eB3+lgscrfxpe8WLtKF3kdoYQCY5dObj0aTXwdB04t89/1O/w1cDnyilFU=')
   try:
     msg = request.args.get('msg')
     if msg == '1':
