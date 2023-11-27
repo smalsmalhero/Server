@@ -9,6 +9,7 @@ from linebot.exceptions import (
 )
 from linebot.models import *
 
+from urllib.parse import urlparse
 
 app = Flask(__name__)
 
@@ -17,21 +18,18 @@ line_bot_api = LineBotApi('AU/QDri2KE1NXmPy3qxcO7hY9+GmviLxov3guTlLUT5XfpsrRlXA7
 # 必須放上自己的Channel Secret
 handler = WebhookHandler('9cf048df757b3f7caabf30a89c853c9a')
 
-line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='你可以開始了'))
-
 # 監聽所有來自 /callback 的 Post Request
 @app.route("/callback", methods=['GET','POST'])
 def callback():
-  line_bot_api = LineBotApi('AU/QDri2KE1NXmPy3qxcO7hY9+GmviLxov3guTlLUT5XfpsrRlXA7we4I32aRebmsHxr/MMl6ywNJLHSD/qmBRvYmFt0esCWnAFiGkYaijl9D05w1eB3+lgscrfxpe8WLtKF3kdoYQCY5dObj0aTXwdB04t89/1O/w1cDnyilFU=')
+  line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='你可以開始了'))
   try:
-    msg = request.args.get('msg')
-    if msg == '1':
-      # 如果 msg 等於 1，發送早安
+    u = urlparse("https://server-slr7.onrender.com/callbcak?)
+    if u.query == '1':
       line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='早安 吃藥時間到囉! ฅ●ω●ฅ'))
-    elif msg == '2':
+    elif u.query == '2':
       # 如果 msg 等於 2，發送午安
       line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='午安 吃藥時間到囉!(๑´ㅂ`๑) '))
-    elif msg == '3':
+    elif u.query == '3':
       # 如果 msg 等於 3，發送晚安
       line_bot_api.push_message('U3f07def73305496dc2076532560edcbc', TextSendMessage(text='早安 吃藥時間到囉! ٩(｡・ω・｡)و'))
     else:
