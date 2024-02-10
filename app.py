@@ -19,7 +19,6 @@ app = Flask(__name__)
 
 access_token = 'h3GpmGFSXkxTCCsyRziMsWA6+3eCF1o5j9WSZ8os5UEDf7LqN+YqXlQFsHPdSTwijVmGMc29uutTLHuqAf28sXtFYI5VvS74M4b24bsXQaZ80fqpb0+NH65vw3ZUcrPuMqoOHWjRBDg3JCcW/dVchgdB04t89/1O/w1cDnyilFU='
 channel_secret = '7befd1a844f9ea937873cd2729b04859'
-
 # 必須放上自己的Channel Access Token
 line_bot_api = LineBotApi(access_token)
 # 必須放上自己的Channel Secret
