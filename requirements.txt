@@ -1,10 +1,4 @@
 line-bot-sdk 
-flask 
-pymongo 
-datetime 
+flask
 openpyxl
-SnowNLP 
-emoji 
-pyshorteners 
-scipy
 gunicorn
