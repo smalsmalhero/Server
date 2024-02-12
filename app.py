@@ -300,6 +300,7 @@ def linebot():
 @app.route('/wifi')
 def setup():
     data = read_wifi_account() + "," + read_wifi_password()
+    print(data)
     return data
 
 # 啟動應用程式
