@@ -107,7 +107,8 @@ def write_wifi_account(account):
     s1 = wb['wifi']                                          # 開啟user_id工作表
 
     s1['B1'].value = account
-    
+    print(account)
+
     wb.save('data.xlsx')
 
 # 儲存wifi密碼
@@ -116,6 +117,7 @@ def write_wifi_password(password):
     s1 = wb['wifi']                                          # 開啟user_id工作表
 
     s1['B2'].value = password
+    print(password)
     
     wb.save('data.xlsx')
 
@@ -125,6 +127,7 @@ def read_wifi_account():
 
     s1 = wb['wifi']
     read_data = s1['B1'].value
+    print(read_data)
 
     return read_data
 
@@ -134,13 +137,14 @@ def read_wifi_password():
 
     s1 = wb['wifi']
     read_data = s1['B2'].value
+    print(read_data)
 
     return read_data
 
 # 設定定時器
 def set_schelude(years, months, days, hours, minutes, user_id):
     def my_task():
-        schedule.clear()  # 取消所有任务
+        schedule.clear(user_id)
         print("任务执行时间：", time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
         push_message('時間到該回診囉！', user_id, access_token)
 
@@ -159,7 +163,7 @@ def set_schelude(years, months, days, hours, minutes, user_id):
     time_in_seconds = time_difference.total_seconds()
 
     # 定义一个定时任务，在指定日期执行
-    schedule.every(time_in_seconds).seconds.do(my_task)
+    schedule.every(time_in_seconds).seconds.do(my_task).tag(user_id)
 
     # 启动定时任务的线程
     scheduler_thread = threading.Thread(target=run_scheduler)
@@ -173,7 +177,7 @@ def linebot():
     try:
         msg = request.args.get('msg')
         number = 1
-        if msg == '1':
+        if msg == '11':
             # 發送所有儲存的資料
             while(1):
                 # 偵測無資料後，跳出迴圈
@@ -185,7 +189,7 @@ def linebot():
                     # 如果 msg 等於 1，發送早安
                     push_message('早安 吃藥時間到囉! ฅ●ω●ฅ', uid=read_user(number), token=access_token)
                     number += 1
-        elif msg == '2':
+        elif msg == '21':
             # 發送所有儲存的資料
             while(1):
                 # 偵測無資料後，跳出迴圈
@@ -197,7 +201,7 @@ def linebot():
                     # 如果 msg 等於 2，發送午安
                     push_message('午安 吃藥時間到囉!(๑´ㅂ`๑) ', uid=read_user(number), token=access_token)
                     number += 1
-        elif msg == '3':
+        elif msg == '31':
             # 發送所有儲存的資料
             while(1):
                 # 偵測無資料後，跳出迴圈
@@ -209,7 +213,7 @@ def linebot():
                     # 如果 msg 等於 3，發送晚安
                     push_message('晚安 吃藥時間到囉! ٩(｡・ω・｡)و', uid=read_user(number), token=access_token)
                     number += 1
-        elif msg == "4":
+        elif msg == "41":
             # 發送所有儲存的資料
             while(1):
                 # 偵測無資料後，跳出迴圈
@@ -222,9 +226,29 @@ def linebot():
                     push_message('睡覺前 也該吃藥囉! (⁠⁠ꈍ⁠ᴗ⁠ꈍ⁠)', uid=read_user(number), token=access_token)
                     number += 1
         elif msg == "5":
-            return read_wifi_account,read_wifi_password
+            # 發送所有儲存的資料
+            while(1):
+                # 偵測無資料後，跳出迴圈
+                if read_user(number) is None:
+                    break
+                elif read_user == 0:
+                    number += 1
+                else:
+                    # 如果 msg 等於 4，發送睡前
+                    push_message('智能藥物盒，已連接！', uid=read_user(number), token=access_token)
+                    number += 1
         elif msg == "6":
-            push_message('智能藥物盒，已連接！', uid=read_user(number), token=access_token)
+            # 發送所有儲存的資料
+            while(1):
+                # 偵測無資料後，跳出迴圈
+                if read_user(number) is None:
+                    break
+                elif read_user == 0:
+                    number += 1
+                else:
+                    # 如果 msg 等於 4，發送睡前
+                    push_message('智能藥物盒，沒有藥囉！', uid=read_user(number), token=access_token)
+                    number += 1
         print('成功')
 
         signature = request.headers['X-Line-Signature']
@@ -239,31 +263,46 @@ def linebot():
                 print(text)
                 if text == '設定:加入id':
                     write_user(user_id, 1)
-                    reply_message('設定：成功設置', reply_token, access_token)
+                    reply_message('設定：成功設置ID', reply_token, access_token)
                 elif text == '設定:移除id':
                     write_user(user_id, 0)
-                    reply_message('設定：成功刪除', reply_token, access_token)
+                    reply_message('設定：成功刪除ID', reply_token, access_token)
                 elif text[:7] == '設定:回診日期':
-                    date = text[7:].lstrip(' ')             # 單獨把日期移出來
-                    year = int(date[:4].lstrip('0'))        # 設定年
-                    month = int(date[5:7].lstrip('0'))      # 設定月
-                    day = int(date[8:10].lstrip('0'))       # 設定日
-                    hour = int(date[11:13].lstrip('0'))     # 設定時
-                    minute = int(date[14:16].lstrip('0'))   # 設定分
+                    date = text[7:].lstrip(' ')                                 # 單獨把日期移出來
+                    year = int(date[:4].lstrip('0'))                            # 設定年
+                    month = int(date[5:7].lstrip('0'))                          # 設定月
+                    day = int(date[8:10].lstrip('0'))                           # 設定日
+                    hour = int(date[11:13].lstrip('0'))                         # 設定時
+                    if date[11:13] == '00':
+                        hour = int(date[11:13].replace('0',' ',1).strip())        # 設定分
+                    else:
+                        hour = int(date[11:13].lstrip())
+                    if date[14:16] == '00':
+                        minute = int(date[14:16].replace('0',' ',1).strip())        # 設定分
+                    else:
+                        minute = int(date[14:16].lstrip())
                     set_schelude(year, month, day, hour, minute, user_id)
-                    reply_message('設定：成功設置', reply_token, access_token)
+                    reply_message('設定：成功設置日期', reply_token, access_token)
                 elif text[:9] == '設定:wifi帳號':
                     account = text[10:].lstrip()
-                    write_wifi_account(account)   
+                    write_wifi_account(account)
+                    reply_message('設定：成功設置WiFi帳號', reply_token, access_token)
                 elif text[:9] == '設定:wifi密碼':
                     password = text[10:].lstrip()
-                    write_wifi_password(password) 
+                    write_wifi_password(password)
+                    reply_message('設定：成功設置WiFi密碼', reply_token, access_token)
         print('成功')
     except Exception as e:
         reply_message('設定：設置失敗', reply_token, access_token)
         print('error',e)
     return 'OK'
-    
-#主程式
-if __name__ == "__main__":
-    app.run()
+
+@app.route('/wifi')
+def setup():
+    data = read_wifi_account() + "," + read_wifi_password()
+    print(data)
+    return data
+
+# 啟動應用程式
+if __name__ == '__main__':
+    app.run(debug=True)
