@@ -171,7 +171,7 @@ def set_schelude(years, months, days, hours, minutes, user_id):
 
 
 # 監聽所有來自 / 的 Post,GET Request
-@app.route("/", methods=['POST','GET'])
+@app.route("/linebot",methods=['POST','GET'])
 def linebot():
     body = request.get_data(as_text=True)
     try:
@@ -251,9 +251,9 @@ def linebot():
                     number += 1
         print('成功')
 
-        signature = request.headers['X-Line-Signature']
-        handler.handle(body, signature)
-        json_data = json.loads(body)
+        signature = request.headers['X-Line-Signature']             # 加入回傳的 headers
+        handler.handle(body, signature)                             # 綁定訊息回傳的相關資訊
+        json_data = json.loads(body)                                # 轉換內容為 json 格式
         reply_token = json_data['events'][0]['replyToken']
         user_id = json_data['events'][0]['source']['userId']
         if 'message' in json_data['events'][0]:
@@ -292,10 +292,9 @@ def linebot():
                     write_wifi_password(password)
                     reply_message('設定：成功設置WiFi密碼', reply_token, access_token)
         print('成功')
-    except Exception as e:
-        reply_message('設定：設置失敗', reply_token, access_token)
-        print('error',e)
-    return 'OK'
+    except:
+        print('error')
+    return 'ok'
 
 @app.route('/wifi')
 def setup():
@@ -305,4 +304,4 @@ def setup():
 
 # 啟動應用程式
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(port=5000)
